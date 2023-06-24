@@ -202,20 +202,23 @@ class Answer extends Component {
               color={"#c342ff"}
               name="send"
               onPress={() => {
-                if (this.compareWord(this.state.text, this.props.word.word)) {
-                  console.log("-------" + this.state.scores);
-                  console.log("------------" + this.props.word.score);
-                  this.setState(
-                    {
-                      result: true,
-                      modalVisible: false,
-                      scores: this.state.scores + this.props.word.score,
-
-                      text: "",
-                    },
-                    this.handleDuration
-                  );
-                } else this.setState({ result: false, modalVisible: true });
+                if(this.state.text.localeCompare('') != 0) {
+                  if (this.compareWord(this.state.text, this.props.word.word)) {
+                    console.log("-------" + this.state.scores);
+                    console.log("------------" + this.props.word.score);
+                    this.setState(
+                      {
+                        result: true,
+                        modalVisible: false,
+                        scores: this.state.scores + this.props.word.score,
+  
+                        text: "",
+                      },
+                      this.handleDuration
+                    );
+                  } else this.setState({ result: false, modalVisible: true });
+                }
+                else {}
               }}
             ></Icon>
           </View>
