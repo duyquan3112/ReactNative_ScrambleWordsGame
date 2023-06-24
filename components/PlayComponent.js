@@ -1,15 +1,282 @@
+import {
+  Text,
+  View,
+  SafeAreaView,
+  FlatList,
+  TextInput,
+  Modal,
+  Alert,
+  Pressable,
+} from "react-native";
 import React, { Component } from "react";
-import { View, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Icon } from "react-native-elements";
+//redux
+import { connect } from "react-redux";
+import { styles } from "../style/style";
+import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
+const mapStateToProps = (state) => {
+  return {
+    words: state.words,
+  };
+};
 
 class Play extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      shouldRender: false,
+    };
+  }
+
+  
+
   render() {
     return (
-    <SafeAreaView>
-        <Text>Play</Text>
-    </SafeAreaView>
+      <SafeAreaView key={this.state.key} style={styles.container}>
+        {/* <PlayNavigator.Screen name="Main" component={MainComponent}></PlayNavigator.Screen> */}
+        <Word
+          words={this.props.words.words}
+          isLoading={this.props.isLoading}
+          error={this.props.error}
+          shouldRender={this.state.shouldRender}
+          handleRender={this.handleRender}
+          goBack={this.goBack}
+        ></Word>
+      </SafeAreaView>
     );
+  }
+
+  handleRender = () => {
+    this.setState({ shouldRender: true });
+  };
+
+  goBack = () => {
+    this.props.navigation.goBack();
+  };
+}
+
+class Word extends Component {
+  handleRender = () => {
+    this.props.handleRender();
+  };
+  goBack = () => {
+    this.props.goBack();
+  };
+  render() {
+    console.log(
+      "------------------" + this.props.words[0].word + this.props.words.length
+    );
+    const wordObject = this.getRandomWord(this.props.words);
+    console.log(wordObject);
+    const arrChar = this.splitWordToArray(wordObject.word);
+    console.log(arrChar);
+    const shuffeArr = this.shuffleArrChar(arrChar);
+    console.log(shuffeArr);
+    return (
+      <View style={styles.centeredView}>
+        <FlatList
+          style={{ flex: 1, flexWrap: "wrap", height: "30%", padding: 10 }}
+          data={shuffeArr}
+          scrollEnabled={false}
+          numColumns={6}
+          renderItem={this.renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
+
+        <Answer
+          word={wordObject}
+          handleRender={this.handleRender}
+          goBack={this.goBack}
+        ></Answer>
+      </View>
+    );
+  }
+  getRandomWord(list) {
+    return (word = list[Math.floor(Math.random() * list.length)]);
+  }
+  splitWordToArray(word) {
+    return (arrChar = word.split(""));
+  }
+  shuffleArrChar(array) {
+    let currentIndex = array.length,
+      randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ];
+    }
+
+    return array;
+  }
+  renderItem = ({ item }) => (
+    <View style={styles.viewCharacter}>
+      <Text style={styles.wordText}>{item}</Text>
+    </View>
+  );
+}
+
+class Answer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: "",
+      modalVisible: false,
+      result: false,
+      duration: 15,
+      key: 0,
+      scores: 0,
+    };
+  }
+  goBack = () => {
+    this.props.goBack();
+  };
+  handleRender = () => {
+    this.props.handleRender();
+  };
+  render() {
+    return (
+      <View style={{width: '100%', flex: 2}}>
+        <View style={{justifyContent: 'center', width: '100%', alignItems: 'center'}}>
+        <Text style={styles.wordText}>Your scores: {this.state.scores}</Text>
+        </View>
+        <View style={styles.viewTextInput}>
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <CountdownCircleTimer
+              key={this.state.key}
+              isPlaying
+              duration={this.state.duration}
+              colors={[
+                "#f79cf4",
+                "#e861c9",
+                "#d93d8b",
+                "#c70a13",
+                "#9c1436",
+                "#6e0107",
+              ]}
+              colorsTime={[10, 8, 6, 4, 2, 0]}
+              size={40}
+              trailStrokeWidth={4}
+              strokeWidth={4}
+              isSmoothColorTransition
+              onComplete={() => {
+                if (this.compareWord(this.state.text, this.props.word.word)) {
+                  console.log("-------" + this.state.scores);
+                  console.log("------------" + this.props.word.score);
+                  this.setState(
+                    {
+                      result: true,
+                      modalVisible: false,
+                      scores: this.state.scores + this.props.word.score,
+
+                      text: "",
+                    },
+                    this.handleDuration
+                  );
+                } else this.setState({ result: false, modalVisible: true });
+              }}
+            >
+              {({ remainingTime }) => <Text>{remainingTime}</Text>}
+
+            </CountdownCircleTimer>
+          </View>
+
+          <TextInput
+            style={styles.textInput}
+            placeholder="Let correct it !!!"
+            onChangeText={(text) => this.setState({ text })}
+            value={this.state.text}
+          />
+          <View style={{ padding: 10 }}>
+            <Icon
+              size={30}
+              color={"#c342ff"}
+              name="send"
+              onPress={() => {
+                if (this.compareWord(this.state.text, this.props.word.word)) {
+                  console.log("-------" + this.state.scores);
+                  console.log("------------" + this.props.word.score);
+                  this.setState(
+                    {
+                      result: true,
+                      modalVisible: false,
+                      scores: this.state.scores + this.props.word.score,
+
+                      text: "",
+                    },
+                    this.handleDuration
+                  );
+                } else this.setState({ result: false, modalVisible: true });
+              }}
+            ></Icon>
+          </View>
+          <View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.modalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                this.setState({ modalVisible: false });
+              }}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Text style={styles.modalText}>
+                    {this.state.result != true ? "Wronggg !!!" : ""}
+                  </Text>
+                  <Text>
+                    Your Scores: {this.state.scores}
+                  </Text>
+                  <Text>
+                    Correct Word: {this.props.word.word}
+                  </Text>
+                  <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => {
+                      this.setState({ modalVisible: false, text: "" });
+                      this.goBack();
+                    }}
+                  >
+                    <Text style={styles.text}>Back To Lobby</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </Modal>
+          </View>
+        </View>
+      </View>
+    );
+  }
+  compareWord(ans, res) {
+    ans = ans.toString().toLowerCase();
+    res = res.toString().toLowerCase();
+
+    ans = ans.trim();
+    res = res.trim();
+    var compare = ans.localeCompare(res);
+    if (compare == 0) return true;
+    return false;
+  }
+  handleDuration() {
+    if (this.state.duration > 5) {
+      this.setState(
+        { duration: --this.state.duration, key: ++this.state.key },
+        this.handleRender
+      );
+    } else {
+      this.setState({ duration: 5, key: ++this.state.key }, this.handleRender);
+    }
   }
 }
 
-export default Play;
+export default connect(mapStateToProps)(Play);

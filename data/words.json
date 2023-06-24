@@ -1,0 +1,68 @@
+{
+    "words": [
+      {
+        "id": 1,
+        "word": "hello",
+        "length": 5,
+        "meaning": "The word is used when meet someone",
+        "type": "verb",
+        "score": 100
+      },
+      {
+        "id": 2,
+        "word": "name",
+        "length": 4,
+        "meaning": "The word is used when meet someone",
+        "type": "verb",
+        "score": 100
+      },
+      {
+        "id": 3,
+        "word": "dog",
+        "length": 3,
+        "meaning": "The word is used when meet someone",
+        "type": "verb",
+        "score": 100
+      },
+      {
+        "id": 4,
+        "word": "apple",
+        "length": 5,
+        "meaning": "The word is used when meet someone",
+        "type": "verb",
+        "score": 100
+      },
+      {
+        "id": 5,
+        "word": "banana",
+        "length": 6,
+        "meaning": "The word is used when meet someone",
+        "type": "verb",
+        "score": 100
+      },
+      {
+        "id": 6,
+        "word": "ghost",
+        "length": 5,
+        "meaning": "The word is used when meet someone",
+        "type": "verb",
+        "score": 100
+      },
+      {
+        "id": 7,
+        "word": "happy",
+        "length": 5,
+        "meaning": "The word is used when meet someone",
+        "type": "verb",
+        "score": 100
+      },
+      {
+        "id": 8,
+        "word": "sad",
+        "length": 3,
+        "meaning": "The word is used when meet someone",
+        "type": "verb",
+        "score": 100
+      }
+    ]
+  }
