@@ -16,10 +16,11 @@ import Dictionary from "./DictionaryComponent";
 import { styles } from "../style/style";
 //redux
 //import { fetchWords } from "../redux/ActionCreators";
-import {getWords} from '../redux/ActionCreators'
+import {getScores, getWords} from '../redux/ActionCreators'
 import {connect} from 'react-redux'
 const mapDispatchToProps = (dispatch) => ({
   fetchWords: () => dispatch(getWords()),
+  fetchScores: () => dispatch(getScores())
   //fetchWord: () => dispatch(getWords())
 });
 class MainComponent extends Component {
@@ -34,6 +35,7 @@ class MainComponent extends Component {
     //redux
     this.props.fetchWords();
     this.props.fetchWords();
+    this.props.fetchScores();
   }
 }
 

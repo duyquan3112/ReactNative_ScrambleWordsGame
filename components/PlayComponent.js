@@ -7,18 +7,25 @@ import {
   Modal,
   Alert,
   Pressable,
+  Button,
 } from "react-native";
 import React, { Component } from "react";
 import { Icon } from "react-native-elements";
+import { HeaderBackButton } from "react-navigation";
 //redux
 import { connect } from "react-redux";
 import { styles } from "../style/style";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
+import { postScore } from "../redux/ActionCreators";
 const mapStateToProps = (state) => {
   return {
     words: state.words,
   };
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  postScore: (user, scores) => dispatch(postScore(user, scores)),
+});
 
 class Play extends Component {
   constructor(props) {
@@ -27,8 +34,6 @@ class Play extends Component {
       shouldRender: false,
     };
   }
-
-  
 
   render() {
     return (
@@ -41,6 +46,7 @@ class Play extends Component {
           shouldRender={this.state.shouldRender}
           handleRender={this.handleRender}
           goBack={this.goBack}
+          postScore={this.props.postScore}
         ></Word>
       </SafeAreaView>
     );
@@ -87,10 +93,12 @@ class Word extends Component {
           word={wordObject}
           handleRender={this.handleRender}
           goBack={this.goBack}
+          postScore={this.props.postScore}
         ></Answer>
       </View>
     );
   }
+  
   getRandomWord(list) {
     return (word = list[Math.floor(Math.random() * list.length)]);
   }
@@ -133,8 +141,17 @@ class Answer extends Component {
       duration: 15,
       key: 0,
       scores: 0,
+      postScoreModal: false,
+      user: ""
     };
   }
+
+  postScore = () => {
+    this.props.postScore(this.state.user, this.state.scores);
+  };
+    
+  
+
   goBack = () => {
     this.props.goBack();
   };
@@ -143,9 +160,15 @@ class Answer extends Component {
   };
   render() {
     return (
-      <View style={{width: '100%', flex: 2}}>
-        <View style={{justifyContent: 'center', width: '100%', alignItems: 'center'}}>
-        <Text style={styles.wordText}>Your scores: {this.state.scores}</Text>
+      <View style={{ width: "100%", flex: 2 }}>
+        <View
+          style={{
+            justifyContent: "center",
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <Text style={styles.wordText}>Your scores: {this.state.scores}</Text>
         </View>
         <View style={styles.viewTextInput}>
           <View
@@ -186,7 +209,6 @@ class Answer extends Component {
               }}
             >
               {({ remainingTime }) => <Text>{remainingTime}</Text>}
-
             </CountdownCircleTimer>
           </View>
 
@@ -202,7 +224,7 @@ class Answer extends Component {
               color={"#c342ff"}
               name="send"
               onPress={() => {
-                if(this.state.text.localeCompare('') != 0) {
+                if (this.state.text.localeCompare("") != 0) {
                   if (this.compareWord(this.state.text, this.props.word.word)) {
                     console.log("-------" + this.state.scores);
                     console.log("------------" + this.props.word.score);
@@ -211,14 +233,14 @@ class Answer extends Component {
                         result: true,
                         modalVisible: false,
                         scores: this.state.scores + this.props.word.score,
-  
+
                         text: "",
                       },
                       this.handleDuration
                     );
                   } else this.setState({ result: false, modalVisible: true });
+                } else {
                 }
-                else {}
               }}
             ></Icon>
           </View>
@@ -237,12 +259,20 @@ class Answer extends Component {
                   <Text style={styles.modalText}>
                     {this.state.result != true ? "Wronggg !!!" : ""}
                   </Text>
-                  <Text>
-                    Your Scores: {this.state.scores}
-                  </Text>
-                  <Text>
-                    Correct Word: {this.props.word.word}
-                  </Text>
+                  <Text>Your Scores: {this.state.scores}</Text>
+                  <Text>Correct Word: {this.props.word.word}</Text>
+                  <Text>Do you want to save your score ?</Text>
+                  <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() =>
+                      this.setState({
+                        postScoreModal: true,
+                        modalVisible: false,
+                      })
+                    }
+                  >
+                    <Text style={styles.text}>Save</Text>
+                  </Pressable>
                   <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => {
@@ -252,6 +282,41 @@ class Answer extends Component {
                   >
                     <Text style={styles.text}>Back To Lobby</Text>
                   </Pressable>
+                </View>
+              </View>
+            </Modal>
+            <Modal
+              animationType="slide"
+              visible={this.state.postScoreModal}
+              onRequestClose={() => {
+                this.setState({ postScoreModal: false });
+                this.goBack();
+              }}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <TextInput
+                    
+                    placeholder="Name"
+                    onChangeText={(text) => this.setState({ user: text})}
+                    value={this.state.user}
+                  />
+
+                  <View
+                    style={{ flexDirection: "row", justifyContent: "center" }}
+                  >
+                    <Button
+                      title="SUBMIT"
+                      color="#7cc"
+                      onPress={() => this.handleSubmit()}
+                    />
+                    <View style={{ width: 10 }} />
+                    <Button
+                      title="CANCEL"
+                      color="#7cc"
+                      onPress={() => this.onPressCancel()}
+                    />
+                  </View>
                 </View>
               </View>
             </Modal>
@@ -280,6 +345,18 @@ class Answer extends Component {
       this.setState({ duration: 5, key: ++this.state.key }, this.handleRender);
     }
   }
+  handleSubmit () {
+    console.log(this.state.scores);
+    console.log(this.state.user);
+
+    // alert(this.props.dishId + ':' + this.state.rating + ':' + this.state.author + ':' + this.state.comment);
+    this.postScore();
+    this.onPressCancel();
+  }
+  onPressCancel = () => {
+    this.setState({ postScoreModal: false });
+    this.goBack();
+  }
 }
 
-export default connect(mapStateToProps)(Play);
+export default connect(mapStateToProps, mapDispatchToProps)(Play);

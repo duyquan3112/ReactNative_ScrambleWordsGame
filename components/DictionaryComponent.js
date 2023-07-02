@@ -24,24 +24,24 @@ const mapStateToProps = (state) => {
 class Words extends Component {
   render() {
     //console.log('--------------' + this.props.words.words[0].word)
-    
+
     if (this.props.isLoading) {
       return <Text>isLoading</Text>;
     } else if (this.props.errMess) {
       return <Text>{this.props.errMess}</Text>;
     } else {
-    return (
-      <Card>
-        <Card.Title>List Of Words</Card.Title>
-        <Card.Divider />
-        <FlatList
-      
-          data={this.props.words}
-          renderItem={({ item, index }) => this.renderWordList(item, index)}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      </Card>
-    );
+      return (
+        <Card>
+          <Card.Title>List Of Words</Card.Title>
+          <Card.Divider />
+
+          <FlatList
+            data={this.props.words}
+            renderItem={({ item, index }) => this.renderWordList(item, index)}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        </Card>
+      );
     }
   }
   renderWordList(item, index) {
@@ -63,7 +63,7 @@ class Dictionary extends Component {
     super(props);
   }
   render() {
-    console.log('--------------' + this.props.words.words[0].word)
+    console.log("--------------" + this.props.words.words[0].word);
     return (
       <Words
         words={this.props.words.words}
