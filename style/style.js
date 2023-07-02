@@ -12,6 +12,17 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
     width: 200,
   },
+  playButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "purple",
+    marginBottom: 10,
+    width: 200,
+  },
   text: {
     fontSize: 16,
     lineHeight: 21,
@@ -92,6 +103,24 @@ export const styles = StyleSheet.create({
     width: '70%',
     margin: 10
   
+  },
+  viewSubmitInput: {
+    
+    flexDirection: "row",
+    width: '100%',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    padding: '5%',
+   
+  },
+  submitInput: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 30,
+    borderColor: '#c342ff',
+    borderBottomWidth: 1,
+    width: '100%',
+    margin: 10
   },
   wordText: {
     color: '#520099',

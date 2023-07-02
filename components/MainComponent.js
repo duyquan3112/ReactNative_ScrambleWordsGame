@@ -18,6 +18,7 @@ import { styles } from "../style/style";
 //import { fetchWords } from "../redux/ActionCreators";
 import {getScores, getWords} from '../redux/ActionCreators'
 import {connect} from 'react-redux'
+import Record from "./RecordComponent";
 const mapDispatchToProps = (dispatch) => ({
   fetchWords: () => dispatch(getWords()),
   fetchScores: () => dispatch(getScores())
@@ -62,6 +63,7 @@ function MainNavigatorScreen() {
         name="Dictionary"
         component={Dictionary}
       ></MainNavigator.Screen>
+      <MainNavigator.Screen name="Record" component={Record}></MainNavigator.Screen>
     </MainNavigator.Navigator>
   );
 }
@@ -92,16 +94,23 @@ function Main({ navigation }) {
           <Button
             onPress={() => navigation.navigate("Play")}
             title="Tap to Play"
+            style={styles.playButton}
           ></Button>
           <Button
             onPress={() => navigation.navigate("Dictionary")}
             title="Dictionary"
+            style={styles.button}
           ></Button>
           <Button
             title="Tutorial"
             onPress={() => setModalVisible(true)}
+            style={styles.button}
           ></Button>
-          <Button title="Quit"></Button>
+          <Button 
+            title="Record"
+            onPress={()=> navigation.navigate("Record")}
+            style={styles.button}
+          ></Button>
           <View>
             <Modal
               animationType="slide"
@@ -133,9 +142,9 @@ function Main({ navigation }) {
 }
 
 function Button(props) {
-  const { onPress, title } = props;
+  const { onPress, title, style } = props;
   return (
-    <Pressable style={styles.button} onPress={onPress}>
+    <Pressable style={style} onPress={onPress}>
       <Text style={styles.text}>{title}</Text>
     </Pressable>
   );

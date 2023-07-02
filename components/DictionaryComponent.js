@@ -63,7 +63,7 @@ class Dictionary extends Component {
     super(props);
   }
   render() {
-    console.log("--------------" + this.props.words.words[0].word);
+    //console.log("--------------" + this.props.words.words[0].word);
     return (
       <Words
         words={this.props.words.words}

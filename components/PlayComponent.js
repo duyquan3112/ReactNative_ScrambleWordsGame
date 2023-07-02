@@ -69,15 +69,29 @@ class Word extends Component {
     this.props.goBack();
   };
   render() {
-    console.log(
-      "------------------" + this.props.words[0].word + this.props.words.length
-    );
+    // // console.log(
+    // //   "------------------" + this.props.words[0].word + this.props.words.length
+    // // );
+    // const wordObject = this.getRandomWord(this.props.words);
+    // //console.log(wordObject);
+    // const arrChar = this.splitWordToArray(wordObject.word);
+    // //console.log(arrChar);
+    // const shuffeArr = this.shuffleArrChar(arrChar);
+    // //console.log(shuffeArr);
+    if (this.props.isLoading) {
+      return <Text>isLoading</Text>;
+    } else if (this.props.errMess) {
+      return <Text>{this.props.errMess}</Text>;
+    } else {
+      // console.log(
+    //   "------------------" + this.props.words[0].word + this.props.words.length
+    // );
     const wordObject = this.getRandomWord(this.props.words);
-    console.log(wordObject);
+    //console.log(wordObject);
     const arrChar = this.splitWordToArray(wordObject.word);
-    console.log(arrChar);
+    //console.log(arrChar);
     const shuffeArr = this.shuffleArrChar(arrChar);
-    console.log(shuffeArr);
+    //console.log(shuffeArr);
     return (
       <View style={styles.centeredView}>
         <FlatList
@@ -97,6 +111,7 @@ class Word extends Component {
         ></Answer>
       </View>
     );
+    }
   }
   
   getRandomWord(list) {
@@ -286,6 +301,7 @@ class Answer extends Component {
               </View>
             </Modal>
             <Modal
+              transparent={true}
               animationType="slide"
               visible={this.state.postScoreModal}
               onRequestClose={() => {
@@ -295,28 +311,33 @@ class Answer extends Component {
             >
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                  <TextInput
-                    
-                    placeholder="Name"
+                
+                  <TextInput 
+                    placeholderTextColor={'grey'}
+                    style={styles.submitInput}
+                    placeholder="Your Name"
                     onChangeText={(text) => this.setState({ user: text})}
                     value={this.state.user}
                   />
-
-                  <View
-                    style={{ flexDirection: "row", justifyContent: "center" }}
-                  >
-                    <Button
-                      title="SUBMIT"
-                      color="#7cc"
+                
+                 
+                    <Pressable
+                     style={[styles.button, styles.buttonClose]}
+                      
+                      
                       onPress={() => this.handleSubmit()}
-                    />
+                    >
+                      <Text style={styles.text}>Submit</Text>
+                    </Pressable>
                     <View style={{ width: 10 }} />
-                    <Button
-                      title="CANCEL"
-                      color="#7cc"
+                    <Pressable
+                     style={[styles.button, styles.buttonClose]}
+                      
                       onPress={() => this.onPressCancel()}
-                    />
-                  </View>
+                    >
+                      <Text style={styles.text}>Cancel</Text>
+                    </Pressable>
+                  
                 </View>
               </View>
             </Modal>
@@ -354,7 +375,7 @@ class Answer extends Component {
     this.onPressCancel();
   }
   onPressCancel = () => {
-    this.setState({ postScoreModal: false });
+    this.setState({ postScoreModal: false, modalVisible: false });
     this.goBack();
   }
 }
