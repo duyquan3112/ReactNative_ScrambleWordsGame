@@ -1,7 +1,7 @@
 import * as ActionTypes from "./ActionTypes";
 import baseUrl from "../shared/baseUrl";
 import * as words from "../data/words.json";
-
+import { format } from "date-fns";
 
 //words
 export const getWords = () => (dispatch) => {
@@ -30,7 +30,7 @@ const addWords = (words) => ({
 
 //post scores
 export const postScore = (user, scores) => (dispatch) => {
-  var newScore = {user: user, scores: scores, date: new Date().toISOString()};
+  var newScore = {user: user, scores: scores, date: format(new Date(), "MM/dd/yyyy H:mma").toString()};
   fetch('https://wordsdata.duyquan3112.repl.co/scoresrp/',{
     method: 'POST',
     headers: {'Content-Type': 'application/json' },

@@ -221,7 +221,7 @@ class Answer extends Component {
                     },
                     this.handleDuration
                   );
-                } else this.setState({ result: false, modalVisible: true });
+                } else this.setState({ result: false, modalVisible: this.state.postScoreModal == true ? false : true });
               }}
             >
               {({ remainingTime }) => <Text>{remainingTime}</Text>}
