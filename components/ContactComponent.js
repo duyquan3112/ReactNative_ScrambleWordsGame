@@ -25,12 +25,18 @@ class Contact extends Component {
             title=" Make Phone Call"
             buttonStyle={{ backgroundColor: "black" }}
             icon={<Icon name="phone" type="font-awesome" color="white" />}
-            onPress={()=>{Linking.openURL('tel: +84934959673');}}
+            onPress={()=>{this.dialCall(84934959673)}}
           />
         </Card>
       </View>
     );
   }
+  dialCall = (number) => {
+    let phoneNumber = '';
+    if (Platform.OS === 'android') { phoneNumber = `tel:${number}`; }
+    else {phoneNumber = `telprompt:${number}`; }
+    Linking.openURL(phoneNumber);
+ };
 
   composeMail() {
     MailComposer.composeAsync({

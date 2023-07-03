@@ -136,10 +136,8 @@ export const styles = StyleSheet.create({
   },
   shadowBox: {
     width: '100%',
-    height: 100,
-    marginBottom: 5,
+    marginBottom: 10,
     backgroundColor: '#ffffff',
-    borderRadius: 20,
     elevation: 5, // Adjust the elevation value as per your preference
     shadowColor: '#000000',
     shadowOpacity: 0.5,

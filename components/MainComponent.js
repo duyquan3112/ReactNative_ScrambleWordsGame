@@ -186,7 +186,7 @@ class RenderSlider extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: 300,
+      width: 250,
       height: 200,
     };
   }
