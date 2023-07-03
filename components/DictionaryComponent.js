@@ -102,7 +102,7 @@ class Words extends Component {
         placeholder="Type Here..."
         inputContainerStyle={{backgroundColor:'white'}}
         containerStyle={{backgroundColor:'white', borderRadius: 10}}
-        disabledInputStyle
+        
         lightTheme
         round
         onChangeText={text => this.searchFilterFunction(text)}
