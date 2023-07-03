@@ -133,5 +133,20 @@ export const styles = StyleSheet.create({
     color: '#520099',
     fontWeight: "bold",
     fontSize: 20
-  }
+  },
+  shadowBox: {
+    width: '100%',
+    height: 100,
+    marginBottom: 5,
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    elevation: 5, // Adjust the elevation value as per your preference
+    shadowColor: '#000000',
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+  },
 });

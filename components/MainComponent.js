@@ -5,24 +5,34 @@ import {
   Pressable,
   SafeAreaView,
   Alert,
-  Modal
-  , ScrollView, Image
+  Modal,
+  ScrollView,
+  Image,
 } from "react-native";
-//import { Image } from "react-native-elements";
+import { Card } from "react-native-elements";
 import React, { Component, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Play from "./PlayComponent";
 import Dictionary from "./DictionaryComponent";
 import { styles } from "../style/style";
+//email
+import * as MailComposer from "expo-mail-composer";
+
+//sliderbox
+import { SliderBox } from "react-native-image-slider-box";
+//animatable
+import * as Animatable from "react-native-animatable";
 //redux
 //import { fetchWords } from "../redux/ActionCreators";
-import {getScores, getWords} from '../redux/ActionCreators'
-import {connect} from 'react-redux'
+import { getScores, getWords } from "../redux/ActionCreators";
+import { connect } from "react-redux";
 import Record from "./RecordComponent";
+import { height } from "deprecated-react-native-prop-types/DeprecatedImagePropType";
+import Contact from "./ContactComponent";
 const mapDispatchToProps = (dispatch) => ({
   fetchWords: () => dispatch(getWords()),
-  fetchScores: () => dispatch(getScores())
+  fetchScores: () => dispatch(getScores()),
   //fetchWord: () => dispatch(getWords())
 });
 class MainComponent extends Component {
@@ -52,10 +62,10 @@ class MainComponent extends Component {
 
 function MainNavigatorScreen() {
   const MainNavigator = createStackNavigator();
- 
+
   return (
     <MainNavigator.Navigator
-      screenOptions={{ headerTitle: "", gestureEnabled: false, }}
+      screenOptions={{ headerTitle: "", gestureEnabled: false }}
       initialRouteName="Main"
     >
       <MainNavigator.Screen name="Main" component={Main}></MainNavigator.Screen>
@@ -64,7 +74,14 @@ function MainNavigatorScreen() {
         name="Dictionary"
         component={Dictionary}
       ></MainNavigator.Screen>
-      <MainNavigator.Screen name="Record" component={Record}></MainNavigator.Screen>
+      <MainNavigator.Screen
+        name="Record"
+        component={Record}
+      ></MainNavigator.Screen>
+      <MainNavigator.Screen
+        name="Contact"
+        component={Contact}
+      ></MainNavigator.Screen>
     </MainNavigator.Navigator>
   );
 }
@@ -77,7 +94,7 @@ function Main({ navigation }) {
         style={{
           width: "100%",
           flex: 1,
-          
+
           //justifyContent: "center",
         }}
       >
@@ -90,14 +107,17 @@ function Main({ navigation }) {
             width: "100%",
             justifyContent: "center",
             alignItems: "center",
-            padding: 10
+            padding: 10,
           }}
         >
-          <Button
-            onPress={() => navigation.navigate("Play")}
-            title="Tap to Play"
-            style={styles.playButton}
-          ></Button>
+          <Animatable.View animation="pulse" easing="ease-out" iterationCount="infinite">
+            <Button
+              onPress={() => navigation.navigate("Play")}
+              title="Tap to Play"
+              style={styles.playButton}
+            ></Button>
+          </Animatable.View>
+
           <Button
             onPress={() => navigation.navigate("Dictionary")}
             title="Dictionary"
@@ -108,9 +128,14 @@ function Main({ navigation }) {
             onPress={() => setModalVisible(true)}
             style={styles.button}
           ></Button>
-          <Button 
+          <Button
             title="Record"
-            onPress={()=> navigation.navigate("Record")}
+            onPress={() => navigation.navigate("Record")}
+            style={styles.button}
+          ></Button>
+          <Button
+            title="Contact"
+            onPress={() => navigation.navigate("Contact")}
             style={styles.button}
           ></Button>
           <View>
@@ -126,10 +151,12 @@ function Main({ navigation }) {
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                   {/* <Text style={styles.modalText}>Hello World!</Text> */}
-                  <View style={{height: 300, width: '100%'}}>
-                  <ImageSlider></ImageSlider>
+                  {/* <View style={{ height: 300, width: "100%" }}>
+                    <ImageSlider></ImageSlider>
+                  </View> */}
+                  <View style={{ height: 300 }}>
+                    <RenderSlider></RenderSlider>
                   </View>
-                   
                   <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => setModalVisible(!modalVisible)}
@@ -144,7 +171,6 @@ function Main({ navigation }) {
       </View>
     </SafeAreaView>
   );
-
 }
 
 function Button(props) {
@@ -154,44 +180,41 @@ function Button(props) {
       <Text style={styles.text}>{title}</Text>
     </Pressable>
   );
-
-  
 }
 
-
-
-const images = [
-  '../pics/banner.png',
-  '../pics/banner.png',
-  '../pics/banner.png',
-];
-
-const ImageSlider = () => {
-  return (
-    <ScrollView horizontal pagingEnabled>
-            {images.map((imageUrl, index) => (
-              <View key={index} style={stl.slide}>
-                <Image source={require('../pics/banner.png')} style={stl.image} />
-                
-              </View>
-            ))}
-    </ScrollView>
-  );
-};
-const stl = StyleSheet.create({
-  slide: {
-    height: '100%',
-    width: '100%',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
-    width: 300,
-    height: '100%',
-    resizeMode: "contain",
-    
-  },
-});
+class RenderSlider extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      width: 300,
+      height: 200,
+    };
+  }
+  render() {
+    const images = [
+      "https://wordsdata.duyquan3112.repl.co/images/tut1.png",
+      "https://wordsdata.duyquan3112.repl.co/images/tut2.png",
+      "https://wordsdata.duyquan3112.repl.co/images/tut3.png",
+    ];
+    return (
+      <View onLayout={this.onLayout}>
+        <SliderBox
+          images={images}
+          parentWidth={this.state.width}
+          sliderBoxHeight={200}
+          resizeMode={"contain"}
+          dotColor="#FFEE58"
+          inactiveDotColor="#90A4AE"
+        />
+      </View>
+    );
+  }
+  onLayout = (evt) => {
+    this.setState({
+      width: evt.nativeEvent.layout.width,
+      height: evt.nativeEvent.layout.height,
+    });
+  };
+}
 
 export default connect(null, mapDispatchToProps)(MainComponent);

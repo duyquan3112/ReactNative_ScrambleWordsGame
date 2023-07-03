@@ -5,6 +5,7 @@ import { Card, ListItem } from "react-native-elements";
 //redux
 import { connect } from "react-redux";
 import { styles } from '../style/style';
+import { SafeAreaView } from 'react-native';
 const mapStateToProps = (state) => {
   return {
     scores: state.scoresrp,
@@ -20,25 +21,29 @@ class Scores extends Component {
         return <Text>{this.props.errMess}</Text>;
       } else {
         return (
-          <Card>
-            <Card.Title>List Of Records</Card.Title>
-            <Card.Divider />
-  
-            {/* <FlatList
+          <SafeAreaView style={{height: '100%', backgroundColor: 'white'}}>
+            <View style={{width: '100%', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{fontSize: 30}}>Records</Text>
+            </View>
+             {/* <FlatList
               data={this.props.scores}
               renderItem={({ item, index }) => this.renderScoreList(item, index)}
               keyExtractor={(item) => item.id.toString()}
             /> */}
-            <ScrollView style={{height: 600, }}>
+            <ScrollView style={{ padding: 10}}>
               {this.props.scores.map((item, index)=>this.renderScoreList(item, index))}
             </ScrollView>
-          </Card>
+          </SafeAreaView>
+  
+           
+          
         );
       }
     }
     renderScoreList(item, index) {
       return (
-        <ListItem key={index}>
+        <View key={index} style={styles.shadowBox}>
+          <ListItem style={{height: 100}} >
           <ListItem.Content>
             <ListItem.Title style={{fontSize: 18}}>
               Name: {item.user} 
@@ -47,6 +52,8 @@ class Scores extends Component {
             <ListItem.Subtitle style={{fontSize: 16}}> Date: {item.date}</ListItem.Subtitle>
           </ListItem.Content>
         </ListItem>
+        </View>
+        
       
         //  <View key={index} style={{borderRadius: 10, backgroundColor: '#fafafa', padding: 5, margin: 5,shadowColor: '#000',shadowOffset: {width: 0, height: 2}, shadowOpacity: 0.1, shadowRadius: 4, elevation: 4,}}>
         //   <Text style={{fontSize: 16}}>Name: {item.user}</Text>

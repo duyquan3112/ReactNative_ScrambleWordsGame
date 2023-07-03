@@ -51,8 +51,8 @@ class Words extends Component {
   }
   renderWordList(item, index) {
     return (
-    <View>
-      <ListItem key={index}>
+    <View key={index}>
+      <ListItem >
         <ListItem.Content>
           <ListItem.Title>
             {item.word} <ListItem.Subtitle>{item.type}</ListItem.Subtitle>
