@@ -38,6 +38,13 @@ export const styles = StyleSheet.create({
     backgroundColor: "white",
     
   },
+  mainContainer: {
+    width: "100%",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#850085",
+  },
   image: {
     width: "100%",
     height: 300,

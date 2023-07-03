@@ -6,6 +6,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   FlatList,
+  ScrollView,
 } from "react-native";
 import { Card, ListItem } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -35,17 +36,22 @@ class Words extends Component {
           <Card.Title>List Of Words</Card.Title>
           <Card.Divider />
 
-          <FlatList
+          {/* <FlatList
+            
             data={this.props.words}
             renderItem={({ item, index }) => this.renderWordList(item, index)}
             keyExtractor={(item) => item.id.toString()}
-          />
+          /> */}
+          <ScrollView style={{height: 600, }}>
+          {this.props.words.map((item, index)=>this.renderWordList(item, index))}
+          </ScrollView>
         </Card>
       );
     }
   }
   renderWordList(item, index) {
     return (
+    <View>
       <ListItem key={index}>
         <ListItem.Content>
           <ListItem.Title>
@@ -54,6 +60,8 @@ class Words extends Component {
           <ListItem.Subtitle>{item.meaning}</ListItem.Subtitle>
         </ListItem.Content>
       </ListItem>
+    </View>
+      
     );
   }
 }

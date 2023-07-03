@@ -5,9 +5,10 @@ import {
   Pressable,
   SafeAreaView,
   Alert,
-  Modal,
+  Modal
+  , ScrollView, Image
 } from "react-native";
-import { Image } from "react-native-elements";
+//import { Image } from "react-native-elements";
 import React, { Component, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -76,6 +77,7 @@ function Main({ navigation }) {
         style={{
           width: "100%",
           flex: 1,
+          
           //justifyContent: "center",
         }}
       >
@@ -123,7 +125,11 @@ function Main({ navigation }) {
             >
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                  <Text style={styles.modalText}>Hello World!</Text>
+                  {/* <Text style={styles.modalText}>Hello World!</Text> */}
+                  <View style={{height: 300, width: '100%'}}>
+                  <ImageSlider></ImageSlider>
+                  </View>
+                   
                   <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => setModalVisible(!modalVisible)}
@@ -151,5 +157,41 @@ function Button(props) {
 
   
 }
+
+
+
+const images = [
+  '../pics/banner.png',
+  '../pics/banner.png',
+  '../pics/banner.png',
+];
+
+const ImageSlider = () => {
+  return (
+    <ScrollView horizontal pagingEnabled>
+            {images.map((imageUrl, index) => (
+              <View key={index} style={stl.slide}>
+                <Image source={require('../pics/banner.png')} style={stl.image} />
+                
+              </View>
+            ))}
+    </ScrollView>
+  );
+};
+const stl = StyleSheet.create({
+  slide: {
+    height: '100%',
+    width: '100%',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: 300,
+    height: '100%',
+    resizeMode: "contain",
+    
+  },
+});
 
 export default connect(null, mapDispatchToProps)(MainComponent);
