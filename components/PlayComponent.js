@@ -8,6 +8,7 @@ import {
   Alert,
   Pressable,
   Button,
+  KeyboardAvoidingView
 } from "react-native";
 import React, { Component } from "react";
 import { Icon } from "react-native-elements";
@@ -175,7 +176,7 @@ class Answer extends Component {
   };
   render() {
     return (
-      <View style={{ width: "100%", flex: 2 }}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ width: "100%", height: '30%', flex: 1 }}>
         <View
           style={{
             justifyContent: "center",
@@ -185,7 +186,7 @@ class Answer extends Component {
         >
           <Text style={styles.wordText}>Your scores: {this.state.scores}</Text>
         </View>
-        <View style={styles.viewTextInput}>
+        <View  style={styles.viewTextInput}>
           <View
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
           >
@@ -343,7 +344,7 @@ class Answer extends Component {
             </Modal>
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
   compareWord(ans, res) {
